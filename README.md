@@ -54,6 +54,38 @@ How the pieces fit
 - `tools_unipile.py` — Search, filter, LLM prompt templates, and safe posting helpers (comment & post). The LLM client (`ChatGroq`) reads its API key from environment variables.
 - `unipile_client.py` — Lightweight wrapper around API calls to Unipile/LinkedIn (search, comment, create post).
 
+Agent DAG (Mermaid)
+--------------------
+```mermaid
+flowchart LR
+	subgraph LangGraph
+		R(router)
+		F(fetch)
+		Fi(filter)
+		C(comment)
+		P(preview)
+		W(weekly_post)
+	end
+
+	R -->|comment/preview| F
+	R -->|motivational| W
+	F --> Fi
+	Fi -->|action=comment| C
+	Fi -->|action=preview| P
+	C --> End((END))
+	P --> End
+	W --> End
+
+	%% External components
+	tools[tools_unipile.py]\n--> R
+	unipile[unipile_client.py]\n--> C & W
+	store[InMemoryStore / Store]
+	LangGraph --> store
+
+	style LangGraph fill:#f9f,stroke:#333,stroke-width:1px
+```
+
+
 Environment variables
 ---------------------
 - `GROQ_API_KEY` — Groq LLM API key used by `langchain_groq`.

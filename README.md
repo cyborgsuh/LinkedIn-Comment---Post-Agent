@@ -16,7 +16,7 @@ Quickstart
 1. Clone the repo and enter the project folder:
 
 ```bash
-git clone <repo-url>
+gh repo clone cyborgsuh/LinkedIn-Comment---Post-Agent
 cd "linkedin comments and post agent"
 ```
 
@@ -33,7 +33,8 @@ pip install -r requirements.txt
 ```
 GROQ_API_KEY=your_groq_api_key_here
 LINKEDIN_UNIPILE_ACCOUNT_ID=your_unipile_account_id
-UNIPILE_API_KEY=your_unipile_api_key_if_needed
+UNIPILE_DSN=your_unipile_DSN
+UNIPILE_API_KEY=your_unipile_api
 ```
 
 4. Run the agent CLI:
@@ -51,7 +52,7 @@ Commands 🛠️
 How the pieces fit
 -------------------
 - `graph.py` — LangGraph workflow: routes commands, optionally fetches posts, filters, and either comments or previews. Compiled with an `InMemoryStore` by default so the graph can read/write cross-thread memory.
-- `tools_unipile.py` — Search, filter, LLM prompt templates, and safe posting helpers (comment & post). The LLM client (`ChatGroq`) reads its API key from environment variables.
+- `tools_unipile.py` — Search, filter, LLM prompt templates, and safe posting helpers (comment & post). 
 - `unipile_client.py` — Lightweight wrapper around API calls to Unipile/LinkedIn (search, comment, create post).
 
 Agent DAG (Mermaid)
@@ -93,11 +94,6 @@ Environment variables
 - `GROQ_API_KEY` — Groq LLM API key used by `langchain_groq`.
 - `LINKEDIN_UNIPILE_ACCOUNT_ID` — Account identifier for posting via Unipile.
 - `UNIPILE_API_KEY` or other Unipile credentials as required by your `unipile_client.py` implementation.
-
-Development notes
------------------
-- The CLI entry in `graph.py` loads a small JSON `agent_memory.json` to track seen posts. The code also compiles the LangGraph with `InMemoryStore()` which keeps memory during process lifetime.
-- `tools_unipile.generate_comment()` and `generate_motivational_post()` strip surrounding double quotes from LLM outputs to avoid posting quoted strings.
 
 Recommended workflow for testing
 --------------------------------

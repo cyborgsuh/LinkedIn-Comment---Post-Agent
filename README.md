@@ -57,32 +57,34 @@ How the pieces fit
 Agent DAG (Mermaid)
 --------------------
 ```mermaid
+---
+config:
+  look: handDrawn
+  theme: neutral
+  layout: dagre
+---
 flowchart LR
-	subgraph LangGraph
-		R(router)
-		F(fetch)
-		Fi(filter)
-		C(comment)
-		P(preview)
-		W(weekly_post)
-	end
+ subgraph LangGraph["LangGraph"]
+        W("weekly_post")
+        P("preview")
+        C("comment")
+        Fi("filter")
+        F("fetch")
+        R("router")
+  end
+    R -- comment/preview --> F
+    R -- motivational --> W
+    F --> Fi
+    Fi -- "action=comment" --> C
+    Fi -- "action=preview" --> P
+    C --> End(("END"))
+    P --> End
+    W --> End
+    tools["tools_unipile.py"] --> R
+    unipile["unipile_client.py"] --> C & W
+    LangGraph --> store["InMemoryStore / Store"]
 
-	R -->|comment/preview| F
-	R -->|motivational| W
-	F --> Fi
-	Fi -->|action=comment| C
-	Fi -->|action=preview| P
-	C --> End((END))
-	P --> End
-	W --> End
-
-	%% External components
-	tools[tools_unipile.py]\n--> R
-	unipile[unipile_client.py]\n--> C & W
-	store[InMemoryStore / Store]
-	LangGraph --> store
-
-	style LangGraph fill:#f9f,stroke:#333,stroke-width:1px
+    style LangGraph fill:#aebaac,stroke:#f4f0cd,stroke-width:2px
 ```
 
 
@@ -141,7 +143,7 @@ Contributions welcome. Suggested steps:
 2. Fork, create a feature branch, and submit a PR with tests where applicable.
 
 Potential contribution ideas
-- See the **Enhancements & Roadmap** section above for ideas and priorities (short-term improvements, persistence & scaling, scheduling, advanced filtering, interactive features).
+- See the [**Enhancements & Roadmap**](#enhancements--roadmap) section above for ideas and priorities (short-term improvements, persistence & scaling, scheduling, advanced filtering, interactive features).
 
 Troubleshooting
 ---------------
